@@ -4,3 +4,27 @@ mysql -u root command
 SHOW DATABASES ;
 CREATE DATABASE schoolDB ;
 SHOW DATABASES ;
+CHALLENGE 2
+USE schoolDB ;
+CREATE TABLE Teachers(id INT AUTO_INCREMENT PRIMARY KEY,first_name VARCHAR(255) NOT NULL,last_name VARCHAR(255) NOT NULL,subject VARCHAR(255) NOT NULL) ;
+SHOW TABLES LIKE 'Teachers' ;
+select * from teachers ;
+CHALLENGE 3
+SELECT first_name,last_name FROM teachers ;
+CHALLENGE 4
+SELECT teachers.first_name AS teacher_first_name, students.first_name AS student_first_name
+FROM teachers
+INNER JOIN students ON teachers.id = students.teacher_id;
+INSERT INTO students(3,"Hadi","Mortada",3) ;
+select students.first_name as student_first_name, teachers.first_name as teacher_first_name from students LEFT JOIN teachers On students.teacher_id =teachers.id ;
+INSERT INTO teachers values(11,"ADEL","AWADA","java") ;
+select students.first_name as student_first_name, teachers.first_name as teacher_first_name from students RIGHT JOIN teachers On students.teacher_id =teachers.id ;
+SELECT students.first_name AS student_first_name, teachers.first_name AS teacher_first_name
+FROM students LEFT JOIN teachers ON students.teacher_id = teachers.id
+UNION 
+SELECT students.first_name AS student_first_name, teachers.first_name AS teacher_first_name
+FROM teachers
+LEFT JOIN students ON students.teacher_id = teachers.id ;
+CHALLENGE 5
+
+
