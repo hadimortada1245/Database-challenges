@@ -1,0 +1,91 @@
+const express= require('express');
+const mongoose=require('mongoose');
+const app =express();
+const PORT = 5000;
+mongoose.connect('mongodb+srv://hadimortada1245:LmIYlYUu3v8PAb5G@cluster0.708wnhp.mongodb.net/Hadi');
+app.get('/api', (req, res) => {
+    res.send('Welcome to the API!');
+  });
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
+//
+const express = require('express');
+const bodyParser = require('body-parser');
+
+const app = express();
+const PORT = 5000;
+
+app.use(bodyParser.json());
+
+const todos = [];
+
+// Step 1: Create a new todo
+app.post('/api/todos', (req, res) => {
+  try {
+    const { title, description } = req.body; // Extract data from the request body
+    const newTodo = { id: Date.now(), title, description }; // Create a new todo with a unique ID
+    todos.push(newTodo); // Add the new todo to the array
+    res.json(newTodo); // Respond with the newly created todo
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' }); // Handle errors
+  }
+});
+
+// Step 2: Get all todos
+app.get('/api/todos', (req, res) => {
+  try {
+    res.json(todos); // Respond with all todos
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// Step 3: Get a single todo by ID
+app.get('/api/todos/:id', (req, res) => {
+  try {
+    const todoId = parseInt(req.params.id); // Get the todo ID from the URL
+    const todo = todos.find((item) => item.id === todoId); // Find the matching todo
+    if (!todo) {
+      return res.status(404).json({ error: 'Todo not found' }); // Handle if todo is not found
+    }
+    res.json(todo); // Respond with the found todo
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// Step 4: Update a todo by ID
+app.put('/api/todos/:id', (req, res) => {
+  try {
+    const todoId = parseInt(req.params.id);
+    const { title, description } = req.body;
+    const todoIndex = todos.findIndex((item) => item.id === todoId); // Find the todo index
+    if (todoIndex === -1) {
+      return res.status(404).json({ error: 'Todo not found' });
+    }
+    todos[todoIndex] = { ...todos[todoIndex], title, description }; // Update todo properties
+    res.json(todos[todoIndex]); // Respond with the updated todo
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// Step 5: Delete a todo by ID
+app.delete('/api/todos/:id', (req, res) => {
+  try {
+    const todoId = parseInt(req.params.id);
+    const todoIndex = todos.findIndex((item) => item.id === todoId); // Find the todo index
+    if (todoIndex === -1) {
+      return res.status(404).json({ error: 'Todo not found' });
+    }
+    const deletedTodo = todos.splice(todoIndex, 1); // Remove the todo from the array
+    res.json(deletedTodo[0]); // Respond with the deleted todo
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
